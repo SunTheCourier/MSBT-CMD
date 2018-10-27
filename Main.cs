@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using text_msbt;
 
 namespace MSBT_cmd
@@ -30,20 +31,24 @@ namespace MSBT_cmd
                     {
                         DirectoryInfo msbtdir = new DirectoryInfo(args[0]);
                         FileInfo[] msbtfiles = msbtdir.GetFiles("*.msbt", SearchOption.AllDirectories);
-                        FileInfo[] bakfile = msbtdir.GetFiles("*.msbt.bak", SearchOption.AllDirectories);
+                        FileInfo[] bakfiles = msbtdir.GetFiles("*.bak", SearchOption.AllDirectories);
 
-                        foreach (FileInfo file in msbtfiles)
+                        if (msbtfiles[0].Exists)
                         {
-                            CMD.Load(file.FullName, true);
-                            foreach (MsbtEntry entry in CMD.Entries)
+                            foreach (FileInfo file in msbtfiles)
                             {
-                                entry.EditedText = label;
+                                CMD.Load(file.FullName, true);
+                                foreach (MsbtEntry entry in CMD.Entries)
+                                {
+                                    entry.EditedText = label;
+                                }
+                                CMD.Save();
+                                File.Delete($"{file.FullName}.bak");
                             }
-                            CMD.Save();
                         }
-                        foreach (FileInfo file in bakfile)
+                        else
                         {
-                            File.Delete(file.FullName);
+                            Console.WriteLine("No MSBT files exist in that directory.");
                         }
                     }
                     else
