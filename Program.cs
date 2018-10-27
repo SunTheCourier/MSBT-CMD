@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using text_msbt;
 
 namespace MSBT_cmd
@@ -13,25 +15,29 @@ namespace MSBT_cmd
                 return;
             }
 
-            string file = args[0];
+            //organize args
+            FileInfo msbt = new FileInfo(args[0]);
             string entryname = args[1];
             string label = args[2];
 
-            MsbtAdapter CMD = new MsbtAdapter();
-            CMD.Load(file, true);
-
-            bool found = false;
-            foreach (MsbtEntry entry in CMD.Entries)
+            //check if the file given actuallt exists
+            if (!msbt.Exists)
             {
-                if (entry.Name == entryname)
-                {
-                    entry.EditedText = label;
-                    found = true;
-                    break;
-                }
+                Console.WriteLine("MSBT file doesnt exist.");
+                return;
             }
+
+            //load MSBT
+            MsbtAdapter CMD = new MsbtAdapter();
+            CMD.Load(msbt.FullName, true);
+
+            //find entry
+            var entry = CMD.Entries.FirstOrDefault(e => e.Name == entryname);
+            if (entry != null) entry.EditedText = label;
+
             CMD.Save();
-            if (found == false) Console.WriteLine("Entry name not found.");
+            if (entry == null) Console.WriteLine("Entry name not found.");
+            File.Delete($"{msbt.FullName}.bak");
             Console.WriteLine("Done!");
         }
     }
