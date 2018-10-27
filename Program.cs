@@ -20,7 +20,7 @@ namespace MSBT_cmd
             string entryname = args[1];
             string label = args[2];
 
-            //check if the file given actuallt exists
+            //check if the file given actually exists
             if (!msbt.Exists)
             {
                 Console.WriteLine("MSBT file doesnt exist.");
