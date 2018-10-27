@@ -47,7 +47,7 @@ namespace MSBT_cmd
                         }
                         else
                         {
-                            Console.WriteLine("No MSBT files exist in that directory.");
+                            Console.WriteLine("No MSBT files exists in that directory.");
                         }
                     }
                     else
