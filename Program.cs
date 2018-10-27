@@ -7,15 +7,15 @@ namespace MSBT_cmd
     {
         static void Main(string[] args)
         {
-            string file = args[0];
-            string entryname = args[1];
-            string label = args[2];
-
             if (args.Length != 3)
             {
                 Console.WriteLine("MSBT_cmd.exe {file path} {entry name} {label text}");
                 return;
             }
+
+            string file = args[0];
+            string entryname = args[1];
+            string label = args[2];
 
             MsbtAdapter CMD = new MsbtAdapter();
             CMD.Load(file, true);
